@@ -3,16 +3,16 @@
     <i class="fas fa-cloud fa-7x" style="color: #2c3e50;"></i>
     <h1 class="mt-2 display-6 fw-bold">SPA MetaWeather Test</h1>
     
-    <input class="form-control mt-4 mb-4" type="text" placeholder="Location">
+    <input @keyup.enter="searchLocation()" class="form-control mt-4 mb-4" type="text" placeholder="Location" v-model="query">
     <div class="d-grid gap-2 d-sm-flex justify-content-sm-end">
-      <button type="button" class="btn btn-outline-dark px-4">Search</button>
+      <button :disabled="!query" @click="searchLocation()" type="button" class="btn btn-outline-dark px-4">Search</button>
     </div>
     
     <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog  modal-fullscreen modal-dialog-scrollable">
       <div class="modal-content">
         <div class="modal-header">
-          <h5 class="modal-title" id="exampleModalLabel">Title</h5>
+          <h5 class="modal-title" id="exampleModalLabel">Location</h5>
           <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
         </div>
         <div class="modal-body">
@@ -41,16 +41,33 @@
   </div>
 
     <ul class="mt-4 mb-4 list-group">
-      <li data-bs-toggle="modal" data-bs-target="#exampleModal" class="list-group-item">location title</li>
+      <li v-for="result in searchResults" :key="result.woeid" data-bs-toggle="modal" data-bs-target="#exampleModal" class="list-group-item">{{ result.title }}</li>
     </ul>
 
   </div>
 </template>
 
 <script>
+const axios = require('axios')
 
 export default {
   name: 'App',
+  data() {
+    return {
+      query: '',
+      searchResults: [],
+      modalTitle: '',
+    }
+  },
+  methods: {
+    searchLocation() {
+      if (this.query) {
+        axios
+          .get(`http://localhost:8080/api/location/search/?query=${this.query}`)
+          .then(response => (this.searchResults = response.data))
+      }
+    },
+  }
 }
 </script>
 
