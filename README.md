@@ -1,4 +1,5 @@
 # spa-metaweather-test
+Test it [here](https://spa-metaweather-test.herokuapp.com/)!
 
 ## Project setup
 ```
@@ -11,6 +12,7 @@ npm run serve
 ```
 
 ### Compiles and minifies for production
+For production, make sure to take care of CORS!
 ```
 npm run build
 ```
